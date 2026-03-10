@@ -95,6 +95,17 @@ services:
       - app-network
 
 
+  frontend:
+    image: as03-frontend:latest
+    container_name: as03-frontend
+    build:
+      context: ../AS-03-Frontend
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+
+
 networks:
   app-network:
     driver: bridge
