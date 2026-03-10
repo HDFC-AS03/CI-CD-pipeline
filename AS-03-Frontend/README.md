@@ -5,7 +5,7 @@ This is the frontend application for the Plug Auth system.
 Built using: - ⚛️ React - ⚡ Vite - 🔐 Keycloak (via FastAPI backend) -
 🌐 REST API integration
 
-------------------------------------------------------------------------..
+------------------------------------------------------------------------
 
 # 📌 Project Overview
 
@@ -16,7 +16,7 @@ This frontend application:
 -   Receives authentication via backend session
 -   Fetches authenticated user details from backend
 -   Displays role-based dashboard
-.
+
 Authentication is handled by the backend (FastAPI). The frontend only
 consumes secured endpoints.
 
