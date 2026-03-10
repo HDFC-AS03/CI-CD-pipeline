@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./AS-03-Frontend # This ensures npm finds package.json
+        working-directory: ./AS-03-Frontend 
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -43,3 +43,29 @@ jobs:
           npm run build
       - name: Build Docker Image
         run: docker build -t as03-frontend:latest .
+
+  # Job 3: Deployment to your EC2
+  deploy:
+    needs: [backend-ci, frontend-ci]
+    runs-on: ubuntu-latest
+    # This ensures deployment only happens when you push to main
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 1. Move into the project directory you just verified
+            cd ~/CI-CD-pipeline
+            
+            # 2. Pull the latest changes from GitHub
+            git pull origin main
+            
+            # 3. Restart the containers with the new code
+            # We use 'sudo' here just in case, though your usermod command should handle it
+            docker compose down
+            docker compose up --build -d
