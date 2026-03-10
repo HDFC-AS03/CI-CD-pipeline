@@ -1037,7 +1037,7 @@ function Dashboard() {
   // Refresh token at 30s remaining
   useEffect(() => {
     if (timeLeft !== 30) return;
-    fetch("http://localhost:8000/refresh", {
+    fetch("http://98.93.255.64:8000/refresh", {
       method: "POST",
       credentials: "include",
     })

@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost";
+// Change localhost to your AWS Public IP
+const API_BASE = "http://98.93.255.64:8000"; 
 
 export function login() {
   window.location.href = `${API_BASE}/login`;
@@ -10,7 +11,7 @@ export function logout() {
 
 export async function getCurrentUser() {
   const response = await fetch(`${API_BASE}/me`, {
-    credentials: "include",
+    credentials: "include", // Required for FastAPI session cookies
   });
 
   if (!response.ok) {
@@ -19,5 +20,4 @@ export async function getCurrentUser() {
 
   const result = await response.json();
   return result.data;  
-
 }
