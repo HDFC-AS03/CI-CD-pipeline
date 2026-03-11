@@ -9,24 +9,16 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
 
-
   keycloak:
-    image: quay.io/keycloak/keycloak:24.0.1
+    image: quay.io/keycloak/keycloak:23.0.7
     container_name: keycloak
-
     command:
       - start-dev
-      - --spi-theme-cache-themes=false
-      - --spi-theme-cache-templates=false
-      - --spi-theme-static-max-age=-1
-
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
@@ -34,58 +26,53 @@ services:
       KC_DB_PASSWORD: keycloak
       KEYCLOAK_ADMIN: superadmin
       KEYCLOAK_ADMIN_PASSWORD: hdfcintern
-      KC_HOSTNAME: 44.209.55.221
-      KC_HOSTNAME_PORT: "8080"
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
-
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY: edge
     ports:
       - "8080:8080"
     volumes:
-      - ./theme/mytheme/login:/opt/keycloak/themes/mytheme/login
-
+      - ./AS-03-Backend/docker-compose/theme:/opt/keycloak/themes/mytheme  # theme is inside docker-compose/
     depends_on:
       - postgres
     networks:
       - app-network
 
-
   backend:
-    build: ..
+    build:
+      context: ./AS-03-Backend   # repo root → AS-03-Backend
     container_name: backend
     ports:
       - "8000:8000"
     environment:
       - KEYCLOAK_SERVER_URL=http://keycloak:8080
-      - KEYCLOAK_EXTERNAL_URL=http://localhost:8080
-      - KEYCLOAK_REFRESH_URL=http://host.docker.internal:8080
+      - KEYCLOAK_EXTERNAL_URL=http://44.209.55.221:8080
       - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
       - KEYCLOAK_REALM=${KEYCLOAK_REALM}
       - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
       - KEYCLOAK_ADMIN_CLIENT_ID=${KEYCLOAK_ADMIN_CLIENT_ID}
       - KEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET}
-      - FRONTEND_URL=http://localhost:3000
-      - GATEWAY_URL=http://localhost
+      - FRONTEND_URL=http://44.209.55.221:3000
       - ENV=dev
     depends_on:
       - keycloak
     networks:
       - app-network
 
-
   gateway:
-    build: ../gateway
+    build:
+      context: ./AS-03-Backend/gateway   # gateway is inside AS-03-Backend
     container_name: api-gateway
     ports:
       - "80:80"
     volumes:
-      - ../gateway/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
-      - ../gateway/lua:/usr/local/openresty/nginx/lua
+      - ./AS-03-Backend/gateway/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./AS-03-Backend/gateway/lua:/usr/local/openresty/nginx/lua
     depends_on:
       - backend
     networks:
       - app-network
-
 
   mailhog:
     image: mailhog/mailhog
@@ -96,22 +83,18 @@ services:
     networks:
       - app-network
 
-
   frontend:
-    image: as03-frontend:latest
-    container_name: as03-frontend
     build:
-      context: ../../AS-03-Frontend
+      context: ./AS-03-Frontend   # sibling folder at repo root
+    container_name: as03-frontend
     ports:
       - "3000:80"
     networks:
       - app-network
 
-
 networks:
   app-network:
     driver: bridge
-
 
 volumes:
   postgres_data:
