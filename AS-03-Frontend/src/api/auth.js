@@ -1,5 +1,5 @@
 // Change localhost to your AWS Public IP
-const API_BASE = "http://98.93.255.64:8000"; 
+const API_BASE = "http://44.209.55.221:8000"; 
 
 export function login() {
   window.location.href = `${API_BASE}/login`;
