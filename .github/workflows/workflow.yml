@@ -1,71 +1,95 @@
+# 1. The Name of this automation pipeline
 name: Project CI Pipeline
 
+# 2. THE TRIGGERS: When should GitHub start this process?
 on:
   push:
+    # Run this whenever I save (push) code to these two branches
     branches: [ "main", "develop" ]
   pull_request:
+    # Run this when someone wants to merge code into the main branch
     branches: [ "main" ]
 
 jobs:
-  # Job 1: Build the Backend (FastAPI)
+  # ==========================================
+  # JOB 1: BUILD THE BACKEND (Python/FastAPI)
+  # ==========================================
   backend-ci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Use a fresh, temporary Linux machine in the cloud
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 # Step A: Download a copy of my code onto this machine
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.11' # Step B: Install Python version 3.11
+          
       - name: Install dependencies
-        working-directory: ./AS-03-Backend
+        working-directory: ./AS-03-Backend # Go into the backend folder first
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt # Step C: Install all libraries (FastAPI, etc.)
+          
       - name: Build Docker Image
         working-directory: ./AS-03-Backend
-        run: docker build -t as03-backend:latest .
+        run: docker build -t as03-backend:latest . # Step D: Create the "Box" for the backend
 
-  # Job 2: Build the Frontend (React)
+  # ==========================================
+  # JOB 2: BUILD THE FRONTEND (React)
+  # ==========================================
   frontend-ci:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./AS-03-Frontend 
+        working-directory: ./AS-03-Frontend # Always work inside the React folder
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 # Step A: Grab the code
+      
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '20' # Step B: Install Node v20 (needed for React)
+          
       - name: Install & Build
         run: |
-          npm install
-          npm run build
+          npm install # Step C: Download all React packages (node_modules)
+          npm run build # Step D: Compress the app into small files for the browser
+          
       - name: Build Docker Image
-        run: docker build -t as03-frontend:latest .
+        run: docker build -t as03-frontend:latest . # Step E: Create the "Box" for the frontend
 
-  # Job 3: Deployment to your EC2
+  # ==========================================
+  # JOB 3: DEPLOYMENT (Sending it to your Server)
+  # ==========================================
   deploy:
+    # SAFETY RULE: Don't start this job unless both Backend and Frontend jobs finish successfully!
     needs: [backend-ci, frontend-ci]
     runs-on: ubuntu-latest
-    # This ensures deployment only happens when you push to main
+    
+    # PERMISSION RULE: Only run this if the code is being pushed to 'main'
+    # (We don't want to deploy experimental code from the 'develop' branch yet!)
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3 # Use a tool that can "log in" to another computer
         with:
+          # These use the secret "passwords" you saved in your GitHub settings
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # 1. Move into the project directory you just verified
+            # --- These commands run INSIDE your AWS EC2 server ---
+            
+            # 1. Enter the folder where the project lives on the server
             cd ~/CI-CD-pipeline
             
-            # 2. Pull the latest changes from GitHub
+            # 2. Download the newest changes from GitHub
             git pull origin main
             
-            # 3. Restart the containers with the new code
-            # We use 'sudo' here just in case, though your usermod command should handle it
+            # 3. Use Docker Compose to:
+            # - 'down': Stop the old version of the app
+            # - 'up --build': Re-build and start the new version
+            # - '-d': Run it in the background so it stays alive
             docker compose down
             docker compose up --build -d
