@@ -57,7 +57,7 @@ async def root():
     return {"message": "Auth Service Running"}
 
 # External Keycloak URL for browser redirects
-KEYCLOAK_EXTERNAL_URL = os.getenv("KEYCLOAK_EXTERNAL_URL", "http://localhost:8080")
+KEYCLOAK_EXTERNAL_URL = os.getenv("KEYCLOAK_EXTERNAL_URL")
 
 
 @router.get("/login")
@@ -182,9 +182,9 @@ async def auth_callback(request: Request):
 
 
 # External Keycloak URL for browser redirects
-KEYCLOAK_EXTERNAL_URL = os.getenv("KEYCLOAK_EXTERNAL_URL", "http://localhost:8080")
+KEYCLOAK_EXTERNAL_URL = os.getenv("KEYCLOAK_EXTERNAL_URL")
 # Keycloak URL reachable from Docker for refresh token calls
-KEYCLOAK_REFRESH_URL = os.getenv("KEYCLOAK_REFRESH_URL", "http://host.docker.internal:8080")
+KEYCLOAK_REFRESH_URL = os.getenv("KEYCLOAK_REFRESH_URL")
 
 @router.get("/logout")
 async def logout():
