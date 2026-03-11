@@ -1,95 +1,130 @@
-# 1. The Name of this automation pipeline
-name: Project CI Pipeline
+name: AS03 Full Stack CI/CD
 
-# 2. THE TRIGGERS: When should GitHub start this process?
 on:
   push:
-    # Run this whenever I save (push) code to these two branches
-    branches: [ "main", "develop" ]
+    branches: ["main", "develop"]
   pull_request:
-    # Run this when someone wants to merge code into the main branch
-    branches: [ "main" ]
+    branches: ["main"]
+
+# Prevent duplicate pipelines running at the same time
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  NODE_VERSION: "20"
 
 jobs:
-  # ==========================================
-  # JOB 1: BUILD THE BACKEND (Python/FastAPI)
-  # ==========================================
-  backend-ci:
-    runs-on: ubuntu-latest # Use a fresh, temporary Linux machine in the cloud
-    steps:
-      - uses: actions/checkout@v4 # Step A: Download a copy of my code onto this machine
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11' # Step B: Install Python version 3.11
-          
-      - name: Install dependencies
-        working-directory: ./AS-03-Backend # Go into the backend folder first
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt # Step C: Install all libraries (FastAPI, etc.)
-          
-      - name: Build Docker Image
-        working-directory: ./AS-03-Backend
-        run: docker build -t as03-backend:latest . # Step D: Create the "Box" for the backend
 
   # ==========================================
-  # JOB 2: BUILD THE FRONTEND (React)
+  # BACKEND CI (FastAPI)
   # ==========================================
-  frontend-ci:
+  backend:
+    name: Backend Build
     runs-on: ubuntu-latest
+
     defaults:
       run:
-        working-directory: ./AS-03-Frontend # Always work inside the React folder
+        working-directory: AS-03-Backend
+
     steps:
-      - uses: actions/checkout@v4 # Step A: Grab the code
-      
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          node-version: '20' # Step B: Install Node v20 (needed for React)
-          
-      - name: Install & Build
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+
+      - name: Install Dependencies
         run: |
-          npm install # Step C: Download all React packages (node_modules)
-          npm run build # Step D: Compress the app into small files for the browser
-          
-      - name: Build Docker Image
-        run: docker build -t as03-frontend:latest . # Step E: Create the "Box" for the frontend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Optional: Add tests later
+      # - name: Run Tests
+      #   run: pytest
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Backend Docker Image
+        run: docker build -t as03-backend:latest .
+
+
 
   # ==========================================
-  # JOB 3: DEPLOYMENT (Sending it to your Server)
+  # FRONTEND CI (React / Vite)
+  # ==========================================
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: AS-03-Frontend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: AS-03-Frontend/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build React App
+        run: npm run build
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Frontend Docker Image
+        run: docker build -t as03-frontend:latest .
+
+
+
+  # ==========================================
+  # DEPLOY TO EC2
   # ==========================================
   deploy:
-    # SAFETY RULE: Don't start this job unless both Backend and Frontend jobs finish successfully!
-    needs: [backend-ci, frontend-ci]
+    name: Deploy to EC2
+    needs: [backend, frontend]
     runs-on: ubuntu-latest
-    
-    # PERMISSION RULE: Only run this if the code is being pushed to 'main'
-    # (We don't want to deploy experimental code from the 'develop' branch yet!)
+
+    # Deploy only from main branch
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v1.0.3 # Use a tool that can "log in" to another computer
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          # These use the secret "passwords" you saved in your GitHub settings
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+
           script: |
-            # --- These commands run INSIDE your AWS EC2 server ---
-            
-            # 1. Enter the folder where the project lives on the server
+            set -e
+
+            echo "Starting deployment..."
+
             cd ~/CI-CD-pipeline
-            
-            # 2. Download the newest changes from GitHub
+
+            echo "Pulling latest code"
             git pull origin main
-            
-            # 3. Use Docker Compose to:
-            # - 'down': Stop the old version of the app
-            # - 'up --build': Re-build and start the new version
-            # - '-d': Run it in the background so it stays alive
+
+            echo "Restarting containers"
             docker compose down
-            docker compose up --build -d
+            docker compose up -d --build
+
+            echo "Cleaning old images"
+            docker image prune -f
+
+            echo "Deployment completed"
