@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     KEYCLOAK_REALM: str = "auth-realm"
     
     # CRITICAL: Point these to your EC2 Public IP
-    KEYCLOAK_SERVER_URL: str = "44.209.55.221:8080"
+    KEYCLOAK_SERVER_URL: str = "http://44.209.55.221:8080"
     FRONTEND_URL: str = "http://44.209.55.221:3000"
     GATEWAY_URL: str = "http://44.209.55.221"
 
