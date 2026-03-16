@@ -1,7 +1,6 @@
 version: "3.8"
 
 services:
-
   postgres:
     image: postgres:15
     container_name: keycloak-postgres
@@ -17,8 +16,8 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.7
     container_name: keycloak
-    # Use a single string for the command to avoid argument splitting issues
-    command: start-dev --http-relative-path /auth
+    # Added --proxy edge to support the Nginx Gateway routing
+    command: start-dev --http-relative-path /auth --proxy edge
     environment:
       - KC_DB=postgres
       - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
@@ -39,19 +38,19 @@ services:
 
   backend:
     build:
-      context: ../AS-03-Backend   # Step up to root, then into Backend
+      context: ../AS-03-Backend
     container_name: backend
     ports:
       - "8000:8000"
     environment:
       - KEYCLOAK_SERVER_URL=http://keycloak:8080/auth
-      - KEYCLOAK_EXTERNAL_URL=http://18.214.226.2:8080/auth # Updated to your current Public IP
+      - KEYCLOAK_EXTERNAL_URL=http://18.214.226.2:8080/auth
       - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
       - KEYCLOAK_REALM=${KEYCLOAK_REALM}
       - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
       - KEYCLOAK_ADMIN_CLIENT_ID=${KEYCLOAK_ADMIN_CLIENT_ID}
       - KEYCLOAK_ADMIN_CLIENT_SECRET=${KEYCLOAK_ADMIN_CLIENT_SECRET}
-      - FRONTEND_URL=http://18.214.226.2:3000 # Updated to your current Public IP
+      - FRONTEND_URL=http://18.214.226.2:3000
       - ENV=dev
     depends_on:
       - keycloak
@@ -60,7 +59,7 @@ services:
 
   gateway:
     build:
-      context: ../AS-03-Backend/gateway   # Step up to root, then into gateway
+      context: ../AS-03-Backend/gateway
     container_name: api-gateway
     ports:
       - "80:80"
@@ -83,7 +82,7 @@ services:
 
   frontend:
     build:
-      context: ../AS-03-Frontend   # Step up to root, then into Frontend
+      context: ../AS-03-Frontend
     container_name: as03-frontend
     ports:
       - "3000:80"
