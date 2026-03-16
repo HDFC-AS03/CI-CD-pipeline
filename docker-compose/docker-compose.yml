@@ -17,9 +17,8 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.7
     container_name: keycloak
-    command: 
-      - start-dev 
-      - --http-relative-path /auth  # Optional: helps with pathing
+    # Use a single string for the command to avoid argument splitting issues
+    command: start-dev --http-relative-path /auth
     environment:
       - KC_DB=postgres
       - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
@@ -28,14 +27,11 @@ services:
       - KEYCLOAK_ADMIN=superadmin
       - KEYCLOAK_ADMIN_PASSWORD=hdfcintern
       - KC_HOSTNAME_STRICT=false
-      - KC_HOSTNAME_STRICT_HTTPS=false  # This is the key setting
+      - KC_HOSTNAME_STRICT_HTTPS=false
       - KC_HTTP_ENABLED=true
       - KC_PROXY=edge
     ports:
       - "8080:8080"
-    volumes:
-      # Adjusted: theme is a sibling to the yml inside the docker-compose folder
-      - ./theme/mytheme:/opt/keycloak/themes/mytheme  
     depends_on:
       - postgres
     networks:
