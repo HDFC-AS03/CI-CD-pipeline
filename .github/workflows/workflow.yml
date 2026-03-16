@@ -113,29 +113,20 @@ jobs:
 
           script: |
             set -e
-            echo "Starting deployment..."
-
-            # Use $HOME instead of ~ for better compatibility
             PROJECT_DIR="$HOME/CI-CD-pipeline"
-
-            if [ ! -d "$PROJECT_DIR" ]; then
-              echo "Directory not found. Cloning repository..."
-              git clone https://github.com/HDFC-AS03/CI-CD-pipeline.git "$PROJECT_DIR"
-            fi
-
+            
             cd "$PROJECT_DIR"
-
             echo "Pulling latest code..."
             git pull origin main
 
+            # Navigate to the folder where the compose file actually lives
+            echo "Moving to docker-compose directory..."
+            cd docker-compose
+
             echo "Restarting containers..."
-            # Since you added yourself to the docker group, 
-            # sudo might not be needed, but it's safer to include 
-            # if permissions aren't refreshed yet.
             docker compose down
             docker compose up -d --build
 
             echo "Cleaning old images..."
             docker image prune -f
-
             echo "Deployment completed!"
