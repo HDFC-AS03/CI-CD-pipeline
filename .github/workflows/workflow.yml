@@ -116,12 +116,21 @@ jobs:
 
             echo "Starting deployment..."
 
+            # 1. Check if directory exists; if not, clone it
+            if [ ! -d "~/CI-CD-pipeline" ]; then
+              echo "Directory not found. Cloning repository..."
+              git clone https://github.com/HDFC-AS03/CI-CD-pipeline.git ~/CI-CD-pipeline
+            fi
+
+            # 2. Navigate to the project folder
             cd ~/CI-CD-pipeline
 
+            # 3. Pull updates and restart services
             echo "Pulling latest code"
             git pull origin main
 
             echo "Restarting containers"
+            # Using 'sudo' if your EC2 user isn't in the docker group
             docker compose down
             docker compose up -d --build
 
