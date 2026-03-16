@@ -44,8 +44,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - KEYCLOAK_SERVER_URL=http://keycloak:8080
-      - KEYCLOAK_EXTERNAL_URL=http://18.214.226.2:8080 # Updated to your current Public IP
+      - KEYCLOAK_SERVER_URL=http://keycloak:8080/auth
+      - KEYCLOAK_EXTERNAL_URL=http://18.214.226.2:8080/auth # Updated to your current Public IP
       - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
       - KEYCLOAK_REALM=${KEYCLOAK_REALM}
       - KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET}
