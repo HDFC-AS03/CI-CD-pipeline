@@ -1131,7 +1131,7 @@ function Dashboard() {
                   e.preventDefault();
 
                   if (route) {
-                    window.open(`http://localhost${route}`, "_blank");
+                    window.open(`http://18.214.226.2${route}`, "_blank");
                     return;
                   }
 
