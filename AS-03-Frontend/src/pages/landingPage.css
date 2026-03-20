@@ -6,12 +6,12 @@
 
 /* ─── VARIABLES ──────────────────────────────────────────────────────────────── */
 :root {
-  --purple:        #6854d9;
-  --purple-dark:   #4b3ab3;
-  --purple-deeper: #2d1f7a;
-  --purple-light:  #8b7ae8;
-  --purple-soft:   #a78bfa;
-  --blue-accent:   #316cff;
+  --blue:          #4B9CD3;
+  --blue-dark:     #1a6099;
+  --blue-deeper:   #0d2f4a;
+  --blue-light:    #89c0e8;
+  --blue-soft:     #9fcce8;
+  --blue-accent:   #2d7eb8;
   --white:         #ffffff;
   --white-dim:     rgba(255,255,255,0.65);
   --white-faint:   rgba(255,255,255,0.08);
@@ -35,7 +35,7 @@ body, html {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(145deg, #2d1f7a 0%, #6854d9 45%, #7c3aed 100%);
+  background: linear-gradient(145deg, #0d2f4a 0%, #1a6099 45%, #2d7eb8 100%);
   overflow: hidden;
 }
 
@@ -43,9 +43,9 @@ body, html {
 .bg-mesh {
   position: absolute; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 20% 10%,  rgba(167,139,250,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 80%,  rgba(49,108,255,0.15)  0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(104,84,217,0.10)  0%, transparent 70%);
+    radial-gradient(ellipse 80% 60% at 20% 10%,  rgba(75,156,211,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%,  rgba(45,126,184,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(26,96,153,0.12)  0%, transparent 70%);
 }
 
 .bg-orb {
@@ -54,13 +54,13 @@ body, html {
 .orb-tl {
   width: 520px; height: 520px;
   top: -180px; left: -180px;
-  background: radial-gradient(circle, rgba(124,58,237,0.45), transparent 70%);
+  background: radial-gradient(circle, rgba(45,126,184,0.5), transparent 70%);
   animation: orbDrift 14s ease-in-out infinite alternate;
 }
 .orb-br {
   width: 600px; height: 600px;
   bottom: -220px; right: -180px;
-  background: radial-gradient(circle, rgba(49,108,255,0.35), transparent 70%);
+  background: radial-gradient(circle, rgba(75,156,211,0.38), transparent 70%);
   animation: orbDrift 18s ease-in-out infinite alternate-reverse;
 }
 
@@ -85,7 +85,7 @@ body, html {
   justify-content: space-between;
   padding: 22px 56px;
   z-index: 50;
-  background: linear-gradient(to bottom, rgba(45,31,122,0.5), transparent);
+  background: linear-gradient(to bottom, rgba(13,47,74,0.5), transparent);
   backdrop-filter: blur(2px);
 }
 
@@ -208,7 +208,7 @@ body, html {
   letter-spacing: -2px;
   margin-bottom: 10px;
 }
-.title-line { color: var(--purple-soft); }
+.title-line { color: var(--blue-soft); }
 
 /* Subtitle */
 .landing-subtitle {
@@ -263,7 +263,7 @@ body, html {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, var(--blue-accent), #5b8fff);
+  background: linear-gradient(135deg, #4B9CD3, #89c0e8);
   color: var(--white);
   border: none;
   border-radius: 14px;
@@ -272,12 +272,12 @@ body, html {
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 12px 32px rgba(49,108,255,0.45), 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 32px rgba(75,156,211,0.45), 0 2px 8px rgba(0,0,0,0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .get-started-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 18px 40px rgba(49,108,255,0.55), 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 18px 40px rgba(75,156,211,0.55), 0 4px 12px rgba(0,0,0,0.2);
 }
 .btn-arrow {
   font-size: 1.1rem;
@@ -355,13 +355,13 @@ body, html {
   transform: translateX(-50%);
   width: 270px;
   height: 510px;
-  background: linear-gradient(160deg, #1e1458 0%, #2d1f7a 100%);
+  background: linear-gradient(160deg, #082f49 0%, #0d3d5e 100%);
   border-radius: 38px;
-  border: 1.5px solid rgba(167,139,250,0.35);
+  border: 1.5px solid rgba(75,156,211,0.35);
   box-shadow:
     0 40px 80px rgba(0,0,0,0.35),
     0 0 0 1px rgba(255,255,255,0.06) inset,
-    0 60px 120px rgba(104,84,217,0.25);
+    0 60px 120px rgba(45,126,184,0.25);
   z-index: 5;
   padding: 0 14px 14px;
   overflow: hidden;
@@ -397,18 +397,18 @@ body, html {
 .pt-av {
   width: 28px; height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #a78bfa, #6366f1);
+  background: linear-gradient(135deg, #4B9CD3, #2d7eb8);
   display: flex; align-items: center; justify-content: center;
   font-size: 9px; font-weight: 800; color: #fff;
 }
 
 /* Balance card inside phone */
 .phone-balance-card {
-  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  background: linear-gradient(135deg, #1a6099, #2d7eb8);
   border-radius: 18px;
   padding: 16px 16px 14px;
   margin-bottom: 14px;
-  border: 1px solid rgba(167,139,250,0.25);
+  border: 1px solid rgba(75,156,211,0.3);
 }
 .pbc-label {
   font-size: 10px;
@@ -501,7 +501,7 @@ body, html {
 /* Phone login button */
 .phone-login-btn {
   margin-top: 12px;
-  background: linear-gradient(135deg, var(--blue-accent), #5b8fff);
+  background: linear-gradient(135deg, #4B9CD3, #2d7eb8);
   border-radius: 12px;
   padding: 11px;
   text-align: center;
@@ -509,7 +509,7 @@ body, html {
   font-weight: 700;
   color: #fff;
   letter-spacing: 0.2px;
-  box-shadow: 0 6px 20px rgba(49,108,255,0.4);
+  box-shadow: 0 6px 20px rgba(75,156,211,0.4);
 }
 
 /* ─── FLOATING CARDS ─────────────────────────────────────────────────────────── */
@@ -603,7 +603,7 @@ body, html {
   height: 150px;
   z-index: 10;
   animation: float 4.5s ease-in-out infinite;
-  filter: drop-shadow(0 12px 24px rgba(124,58,237,0.5));
+  filter: drop-shadow(0 12px 24px rgba(45,126,184,0.5));
 }
 
 @keyframes float {
@@ -625,20 +625,20 @@ body, html {
 .chair-back {
   position: absolute; right: 20px; bottom: 100px;
   width: 100px; height: 120px;
-  background: linear-gradient(160deg, #7c6ee6, #5b4ab3);
+  background: linear-gradient(160deg, #4B9CD3, #2d7eb8);
   border-radius: 50px 50px 20px 20px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 .chair-seat {
   position: absolute; right: 10px; bottom: 90px;
   width: 120px; height: 28px;
-  background: #5b4ab3;
+  background: #2d7eb8;
   border-radius: 14px;
 }
 .chair-legs .leg-front,
 .chair-legs .leg-back {
   position: absolute; bottom: 0; width: 6px; height: 95px;
-  background: rgba(180,170,255,0.5); border-radius: 3px;
+  background: rgba(137,192,232,0.5); border-radius: 3px;
 }
 .leg-front { right: 40px; transform: rotate(-10deg); }
 .leg-back  { right: 90px; transform: rotate(10deg); }
@@ -650,14 +650,14 @@ body, html {
 }
 .pant-leg {
   position: absolute; width: 22px; height: 110px;
-  background: #2a2858; border-radius: 10px;
+  background: #0d2f4a; border-radius: 10px;
 }
 .left-leg  { right: 40px; transform: rotate(-15deg); }
 .right-leg { right: 15px; transform: rotate(5deg); height: 105px; }
 
 .shoe {
   position: absolute; bottom: -5px; width: 40px; height: 18px;
-  background: linear-gradient(90deg, #4b3ab3, #6854d9);
+  background: linear-gradient(90deg, #1a6099, #4B9CD3);
   border-radius: 10px 20px 10px 10px;
 }
 .left-shoe  { right: 45px; transform: rotate(-15deg); }
@@ -670,13 +670,13 @@ body, html {
 }
 .shirt-body {
   width: 100%; height: 100%;
-  background: linear-gradient(160deg, #e0e7ff, #c7d2fe);
+  background: linear-gradient(160deg, #deeefa, #c0dcf0);
   border-radius: 25px 35px 15px 15px;
 }
 .shirt-arm {
   position: absolute; top: 15px; left: -25px;
   width: 60px; height: 20px;
-  background: linear-gradient(90deg, #c7d2fe, #e0e7ff);
+  background: linear-gradient(90deg, #c0dcf0, #deeefa);
   border-radius: 10px; transform: rotate(-30deg);
 }
 
@@ -693,7 +693,7 @@ body, html {
 .hair {
   position: absolute; top: -5px; right: 0;
   width: 55px; height: 40px;
-  background: linear-gradient(135deg, #4b3ab3, #6854d9);
+  background: linear-gradient(135deg, #1a6099, #4B9CD3);
   border-radius: 30px 30px 10px 15px;
 }
 
@@ -704,9 +704,9 @@ body, html {
 }
 .laptop-screen {
   width: 80px; height: 52px;
-  background: linear-gradient(160deg, #1e1458, #2d1f7a);
+  background: linear-gradient(160deg, #082f49, #0d3d5e);
   border-radius: 7px 7px 0 0;
-  border: 1.5px solid rgba(167,139,250,0.3);
+  border: 1.5px solid rgba(75,156,211,0.3);
   position: relative;
   transform: perspective(200px) rotateX(8deg);
   display: flex;
@@ -727,10 +727,10 @@ body, html {
 }
 .laptop-base {
   width: 88px; height: 6px;
-  background: #1e1458;
+  background: #082f49;
   border-radius: 0 0 5px 5px;
   margin-left: -4px;
-  border: 1px solid rgba(167,139,250,0.2);
+  border: 1px solid rgba(75,156,211,0.2);
 }
 
 /* ─── FLOOR ──────────────────────────────────────────────────────────────────── */
@@ -738,8 +738,8 @@ body, html {
   position: absolute;
   bottom: 0; left: 0; width: 100%; height: 14vh;
   z-index: 2;
-  background: linear-gradient(to top, rgba(30,20,88,0.7) 0%, transparent 100%);
-  border-top: 1px solid rgba(167,139,250,0.12);
+  background: linear-gradient(to top, rgba(8,47,73,0.7) 0%, transparent 100%);
+  border-top: 1px solid rgba(75,156,211,0.14);
 }
 
 /* ─── RESPONSIVE ─────────────────────────────────────────────────────────────── */
