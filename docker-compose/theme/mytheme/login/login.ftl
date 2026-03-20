@@ -388,7 +388,7 @@
             <div id="mw-form-area">
                 <p class="mw-welcome">Welcome to</p>
                 <h1 class="mw-brand">Pramann</h1>
-                <p class="mw-tagline">A personal wallet</p>
+                <p class="mw-tagline">A keycloak based Authentication & Authourization service</p>
 
                 <#if realm.password>
                     <form id="kc-form-login" action="${url.loginAction}" method="post"
