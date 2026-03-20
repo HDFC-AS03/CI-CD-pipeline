@@ -387,7 +387,7 @@
             <!-- Form card -->
             <div id="mw-form-area">
                 <p class="mw-welcome">Welcome to</p>
-                <h1 class="mw-brand">Mywallet</h1>
+                <h1 class="mw-brand">Pramann</h1>
                 <p class="mw-tagline">A personal wallet</p>
 
                 <#if realm.password>

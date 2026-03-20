@@ -21,11 +21,6 @@ function LandingPage() {
           <div className="lp-logo-icon">💳</div>
           <span className="lp-logo-text">Mywallet</span>
         </div>
-        <div className="lp-nav-links">
-          <a href="#">Features</a>
-          <a href="#">Security</a>
-          <a href="#">Pricing</a>
-        </div>
         <button className="lp-nav-btn" onClick={handleGetStarted}>Sign In →</button>
       </nav>
 
