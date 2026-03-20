@@ -124,7 +124,7 @@
             .mw-tagline {
                 font-size: 0.92rem;
                 font-weight: 700;
-                color: #5046e5;
+                color: #847ee0;
                 margin-bottom: 2.4rem;
             }
 
