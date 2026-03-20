@@ -242,13 +242,13 @@
                 </svg>
             </div>
 
-            <h1 class="mw-brand">Mywallet</h1>
-            <p class="mw-subtitle">A personal wallet</p>
+            <h1 class="mw-brand">Pramann</h1>
+            <p class="mw-subtitle">A keycloak based Authentication & Authourization service</p>
 
             <div class="mw-divider"></div>
 
             <p class="mw-question">Logging out?</p>
-            <p class="mw-desc">You'll need to sign in again to access your wallet.</p>
+            <p class="mw-desc">You'll need to sign in again.</p>
 
             <form class="form-actions" action="${url.logoutConfirmAction}" method="POST">
                 <input type="hidden" name="session_code" value="${logoutConfirm.code}">
