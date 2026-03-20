@@ -419,7 +419,6 @@ function ManagerView({ user }) {
   ];
   const teamPerformance = [65, 59, 80, 81, 56, 55, 40, 70, 75, 68, 85, 90];
 
-  // NEW DUMMY DATA FOR MANAGER
   const topClients = [
     { name: "TechCorp Ltd", val: "$45k", sub: "12 Projects", col: "#6366f1" },
     { name: "Global Sols", val: "$28k", sub: "5 Projects", col: "#8b5cf6" },
@@ -428,7 +427,7 @@ function ManagerView({ user }) {
 
   return (
     <>
-      {/* 1. Manager KPIs (Status Strip Removed) */}
+      {/* 1. Manager KPIs */}
       <div className="kpi-row four-col">
         {[
           {
@@ -463,10 +462,7 @@ function ManagerView({ user }) {
           <div
             key={i}
             className="kpi-card"
-            style={{
-              animationDelay: `${i * 80}ms`,
-              borderTop: "3px solid var(--mgr-accent)",
-            }}
+            style={{ animationDelay: `${i * 80}ms` }}
           >
             <div className="kpi-top">
               <div
@@ -631,7 +627,7 @@ function ManagerView({ user }) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// VIEW 3: USER DASHBOARD (COMPLETED)
+// VIEW 3: USER DASHBOARD
 // ═══════════════════════════════════════════════════════════════════════════════
 function UserView({ user }) {
   const transactions = [
@@ -673,7 +669,6 @@ function UserView({ user }) {
   ];
   const spendingHistory = [30, 45, 32, 60, 40, 55, 30, 25, 40, 35, 20, 50];
 
-  // NEW DUMMY DATA FOR UPCOMING PAYMENTS
   const upcomingBills = [
     {
       title: "Internet Fiber",
@@ -709,10 +704,7 @@ function UserView({ user }) {
     <>
       {/* 1. Wallet Cards */}
       <div className="kpi-row three-col">
-        <div
-          className="kpi-card"
-          style={{ borderTop: "3px solid var(--user-accent)" }}
-        >
+        <div className="kpi-card">
           <div className="kpi-top">
             <div
               className="kpi-icon-box"
@@ -725,7 +717,7 @@ function UserView({ user }) {
           <div className="kpi-val">$2,450.00</div>
           <div className="kpi-label">Available Balance</div>
         </div>
-        <div className="kpi-card" style={{ borderTop: "3px solid #f59e0b" }}>
+        <div className="kpi-card">
           <div className="kpi-top">
             <div
               className="kpi-icon-box"
@@ -738,7 +730,7 @@ function UserView({ user }) {
           <div className="kpi-val">$840.50</div>
           <div className="kpi-label">Monthly Spending</div>
         </div>
-        <div className="kpi-card" style={{ borderTop: "3px solid #10b981" }}>
+        <div className="kpi-card">
           <div className="kpi-top">
             <div
               className="kpi-icon-box"
@@ -1014,7 +1006,6 @@ function Dashboard() {
       .catch(() => setIsLoading(false));
   }, []);
 
-  // Countdown tick
   useEffect(() => {
     if (timeLeft === null) return;
     if (timeLeft <= 0) {
@@ -1034,7 +1025,6 @@ function Dashboard() {
     return () => clearInterval(iv);
   }, [timeLeft === null]);
 
-  // Refresh token at 30s remaining
   useEffect(() => {
     if (timeLeft !== 30) return;
     fetch("http://18.214.226.2:8000/refresh", {
@@ -1100,13 +1090,10 @@ function Dashboard() {
     .substring(0, 2)
     .toUpperCase();
 
-  // ─── MAIN CONTENT RENDER LOGIC ──────────────────────────────────────────────
   const renderContent = () => {
-    // 1. Check if User Management is active
     if (activeNav === "User Management") {
       return <UserManagement />;
     }
-    // 2. Fallback to Role-based Views
     if (roleType === "admin") return <AdminView user={user} />;
     if (roleType === "manager") return <ManagerView user={user} />;
     if (roleType === "user") return <UserView user={user} />;
@@ -1168,7 +1155,6 @@ function Dashboard() {
               {activeNav === "User Management" ? "User Management" : pageTitle}
             </h1>
 
-            {/* UPDATED: Timer now shows for ALL roles (removed role check) */}
             {timeLeft !== null &&
               (() => {
                 const mins = Math.floor(timeLeft / 60);
