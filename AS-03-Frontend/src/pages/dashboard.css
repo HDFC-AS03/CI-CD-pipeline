@@ -20,7 +20,7 @@
 
   /* Admin theme — deep crimson */
   --admin-accent:  #6495ED;
-  --admin-dark:    #991b1b;
+  --admin-dark:    #005A9C;
   --admin-light:   #fee2e2;
   --admin-sidebar: #0f172a;
   --admin-nav-act: #6495ED;
@@ -118,7 +118,7 @@ button { cursor: pointer; font-family: var(--font); }
 .nav-icon { font-size: 16px; width: 20px; text-align: center; }
 
 /* Active nav per role */
-.role-admin   .nav-active { background: rgba(220,38,38,0.2);  color: #fca5a5; }
+.role-admin   .nav-active { background: rgba(220,38,38,0.2);  color: #005A9C; }
 .role-manager .nav-active { background: rgba(99,102,241,0.2); color: #c4b5fd; }
 .role-user    .nav-active { background: rgba(6,182,212,0.2);  color: #67e8f9; }
 
