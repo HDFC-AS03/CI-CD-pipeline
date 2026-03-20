@@ -19,11 +19,11 @@
   --card-shadow:   0 2px 12px rgba(0, 0, 0, 0.05);
 
   /* Admin theme — deep crimson */
-  --admin-accent:  #dc2626;
+  --admin-accent:  #6495ED;
   --admin-dark:    #991b1b;
   --admin-light:   #fee2e2;
   --admin-sidebar: #0f172a;
-  --admin-nav-act: #dc2626;
+  --admin-nav-act: #6495ED;
 
   /* Manager theme — indigo-slate */
   --mgr-accent:   #4f46e5;
